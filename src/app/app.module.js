@@ -21,9 +21,14 @@ var AppComponent = (function () {
     function AppComponent(http) {
         var _this = this;
         this.http = http;
+        this.end = '\r\n</urlset>';
+        this.output = "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd\">";
         this.getJSON().subscribe(function (data) {
             console.log(data.urlset);
             _this.urlList = data.urlset.url;
+            for (var i = 0; i < _this.urlList.length; i++) {
+                _this.output += '\r\n\t<url>\r\n\t\t<loc>' + _this.urlList[i].loc + '</loc>\r\n\t\t<lastmod>' + _this.urlList[i].lastmod + '</lastmod>\r\n\t\t<changefreq>always</changefreq>\r\n\t</url>';
+            }
         });
     }
     AppComponent.prototype.getJSON = function () {
@@ -32,8 +37,7 @@ var AppComponent = (function () {
     };
     AppComponent.prototype.addUrl = function () {
         this.newUrl = 'https://example.co.uk/takeaway/' + this.newUrl;
-        this.urlList.push({ "changefreq": "always", "lastmod": new Date(), "loc": this.newUrl });
-        console.log(this.urlList);
+        this.output += '\r\n\t<url>\r\n\t\t<loc>' + this.newUrl + '</loc>\r\n\t\t<lastmod>' + new Date() + '</lastmod>\r\n\t\t<changefreq>always</changefreq>\r\n\t</url>';
         this.newUrl = '';
     };
     AppComponent.prototype.convertXml = function () {
@@ -51,7 +55,7 @@ AppComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
         selector: 'my-app',
-        template: "\n  <div *ngFor= \"let url of urlList\"><p> {{url.loc}} </p></div>\n  https://example.co.uk/takeaway/<input type=\"text\" [(ngModel)]=\"newUrl\"/><button (click)=\"addUrl()\">Add</button><br>\n  <button (click)=\"convertXml()\">Download XML</button>\n  ",
+        template: "\n  <div *ngFor= \"let url of urlList\"><p> {{url.loc}} </p></div>\n  https://example.co.uk/takeaway/<input type=\"text\" [(ngModel)]=\"newUrl\"/><button (click)=\"addUrl()\">Add</button><br>\n  <pre>{{output}}{{end}}</pre>\n  <button>Download XML</button>\n  \n  ",
     }),
     __metadata("design:paramtypes", [http_2.Http])
 ], AppComponent);

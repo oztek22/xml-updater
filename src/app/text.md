@@ -15,9 +15,7 @@
 <changefreq>always</changefreq>
 </url>
 <url>
-<loc>
-https://example.co.uk/takeaway/subway
-</loc>
+<loc>https://example.co.uk/takeaway/subway</loc>
 <lastmod>2017-03-16T07:16:02+00:00</lastmod>
 <changefreq>always</changefreq>
 </url>
